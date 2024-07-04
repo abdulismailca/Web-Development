@@ -1,0 +1,147 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background-color: white;
+}
+
+#navbar {
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid #555;
+}
+
+#left {
+    float: left;
+    display: flex;
+    align-self: center;
+}
+
+#left h3 {
+    display: inline;
+    color: #555;
+}
+
+#left img {
+    height: 50px;
+    align-self: center;
+    margin: 0 15px;
+}
+
+#right {
+    float: right;
+    align-self: center;
+    width: auto;
+}
+
+#right img {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.container {
+    width: 100vw;
+    height: calc(100vh - 80px);
+    display: flex;
+    overflow: hidden;
+}
+
+.sidebar {
+    width: 300px;
+    height: calc(100vh - 80px);
+    border-right: 2px solid #555;
+}
+
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar nav a {
+    color: #555;
+    text-decoration: none;
+    text-transform: uppercase;
+    margin: 11px;
+}
+
+.content {
+    flex: 1;
+    background-color: white;
+    padding:0 15px 15px 15px;
+    
+}
+.heading{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0;
+}
+.heading h2{
+    display: inline;
+    color: #555;
+}
+.link-btn{
+    background-color: rgb(55, 177, 55);
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 15px 30px;
+}
+.table-container{
+    overflow: hidden;
+}
+.table-container table{
+    width: 100%;
+    margin-top: 15px;
+
+}
+.table-container table,th,td{
+    border: 2px solid #555;
+    border-collapse: collapse;
+}
+th{
+    text-transform: uppercase;
+    text-align: left;
+}
+tr th:first-child, td:first-child{
+    text-align: center;
+    width: 50px;
+}
+
+th, td{
+    padding: 15px;
+}
+.class{
+    display: flex;
+    align-items: center;
+    
+}
+.class img{
+    width:20px ;
+    height:20px;
+    
+    margin-right: 15px;
+}
+.class i{
+    width:20px ;
+    height:20px;
+    margin-right: 15px;
+    vertical-align: middle;
+    color: black;
+}
+@media only screen and (max-width: 767px){
+    .sidebar{
+        display: none;
+    }
+    .content {
+        flex: 1;
+        background-color: white;
+        padding:0 15px 15px 15px;
+        overflow: scroll;
+    }
+}

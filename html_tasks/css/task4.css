@@ -1,0 +1,118 @@
+body{
+    margin: auto 0;
+    background-color: white;
+}
+#navbar{
+    background-color: #625c5c;
+    height: 90px;
+    display: flex;
+    justify-content: space-between;
+    /* margin-bottom: 5px; */
+    border-bottom: 1px solid #ececec;
+
+}
+#left{
+    float: left;
+    display: flex;
+    align-self: center;
+}
+#left img{
+    height: 50px;
+    align-self: center;
+    margin: 5px 5px;
+}
+#right{
+    float: right;
+    align-self: center;
+    width: auto;
+}
+#right img{
+   height: 50px;
+   border-radius: 50%;
+   margin-right: 5px;
+}
+#side{
+    background-color: #625c5c;
+    float: left;
+    width: 115px;
+    height: calc((100%));
+    /* margin-right: 5px; */
+}
+#main{
+    float: right ;
+    width: calc((100%) - 145px);
+    background-color: red;
+    height: calc((100%) - 30px);
+    padding: 15px;
+}
+#main >h2{
+    display: inline;
+    text-decoration: underline;
+    
+}
+#down{
+    height: calc((100vh) - 91px);
+
+}
+.bg_green{
+    background-color: green;
+
+}
+.bg_purple{
+    background-color: purple;
+}
+.bg_violet{
+    background-color: royalblue;
+}
+.bg_red{
+    background-color: rgb(130, 43, 207);
+}
+#f-i{
+    height: 200px;
+    float: left;
+    width: calc( 100% /4 - 10px );
+    display: flex;
+    margin-right: 10px;
+    margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: ;
+
+
+}
+ #f-i h2 {
+
+      display: inline; 
+      margin-bottom: 0px;
+      color: white;
+ }
+ #f-i h3{
+    display: inline; 
+    
+    color: white;
+ }
+
+
+.circlediv div{
+    height: 200px;
+    float: left;
+    width: calc( 100% /4 - 10px );
+    display: flex;
+    margin-right: 10px;
+    margin-top: 5px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+@media only screen and(max-width:97px) and (min-width:30px){
+    /* you can write youre style here for responsive */
+}
+.bg_green:nth-child(2){
+/* youcan design for a sepecifi , in responsive */
+}
