@@ -5,13 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="test.css">
 </head>
-
 <body> 
-  <div id="navbar">
+    <div id="navbar">
         <div id="left">
             <img src="images/bpcllogo.jpeg" alt="logo" />
         </div>
-        
         <div id="right">
             <nav>
                 <a href="#">Home</a>
@@ -22,7 +20,6 @@
     </div>
 
     <?php
-
 $name = '';
 $open = 0;
 $close = 0;
@@ -62,63 +59,84 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Perform calculations
     $totalltr = $close - $open;
     $totalcash = $totalltr * $tdrate;
-
     $tally = $cashoff + $cashhand + $credit + $upi + $swipe + $test + $other;
     $short = $tally - $totalcash;
 
+    // Ensure $short remains a number
     if ($short > 0) {
-        $short = "+ " . $short;
+        $short = $short;
     } elseif ($short == 0) {
         $short = 0;
     } 
 
+    // Database connection details
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "bpcldb";
 
-//bpcldb (database) connection
+    // Create connection
+    $conn = new mysqli($servername, $username, $password, $dbname);
 
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "bpcldb";
+    // SQL to create table if it doesn't exist
+    $sql = "CREATE TABLE IF NOT EXISTS salesdata (
+        id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(100) NOT NULL,
+        open_read FLOAT,
+        close_read FLOAT,
+        today_rate FLOAT,
+        cash_office FLOAT,
+        cash_hand FLOAT,
+        credit FLOAT,
+        upi FLOAT,
+        swipe FLOAT,
+        test FLOAT,
+        other FLOAT,
+        fuel_type VARCHAR(50),
+        total_ltr FLOAT,
+        total_cash FLOAT,
+        tally FLOAT,
+        short FLOAT
+    )";
+    $conn->query($sql);
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+    // SQL to insert data
+    $sql_insert = "INSERT INTO salesdata (name, open_read, close_read, today_rate, cash_office, cash_hand, credit, upi, swipe, test, other, fuel_type, total_ltr, total_cash, tally, short)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql_insert);
 
+    // Bind parameters and execute the statement
+    if ($stmt) {
+        $stmt->bind_param("sddddddddddsdddd", $name, $open, $close, $tdrate, $cashoff, $cashhand, $credit, $upi, $swipe, $test, $other, $fueltype, $totalltr, $totalcash, $tally, $short);
 
+        // Execute the statement
+        if ($stmt->execute()) {
+            echo "Data inserted successfully.";
+        } else {
+            echo "Error inserting data: " . $stmt->error;
+        }
 
-// SQL query to create table
-$sql_create_table = "CREATE TABLE IF NOT EXISTS sales_data (
-    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    open_read DECIMAL(10, 2) DEFAULT '0.00',
-    close_read DECIMAL(10, 2) DEFAULT '0.00',
-    today_rate DECIMAL(10, 2) DEFAULT '0.00',
-    cash_office DECIMAL(10, 2) DEFAULT '0.00',
-    cash_hand DECIMAL(10, 2) DEFAULT '0.00',
-    credit DECIMAL(10, 2) DEFAULT '0.00',
-    upi DECIMAL(10, 2) DEFAULT '0.00',
-    swipe DECIMAL(10, 2) DEFAULT '0.00',
-    test DECIMAL(10, 2) DEFAULT '0.00',
-    other DECIMAL(10, 2) DEFAULT '0.00',
-    fuel_type VARCHAR(50),
-    total_ltr DECIMAL(10, 2) DEFAULT '0.00',
-    total_cash DECIMAL(10, 2) DEFAULT '0.00',
-    tally DECIMAL(10, 2) DEFAULT '0.00',
-    short DECIMAL(10, 2) DEFAULT '0.00'
-)";
+        // Close statement
+        $stmt->close();
+    } else {
+        echo "Error preparing statement: " . $conn->error;
+    }
+    $conn->close();
 }
-
-
-
 ?>
 
 
     <div class="main">
         <div class="main-lf">
             <!--  side bar content here -->
-             <h2 class="main-lf-h2">DETAILS ENTERD </h2>
+            <h2 class="main-lf-h2">DETAILS ENTERED</h2>
             <div class="table">
-                <form action="collected.php">
+                <form>
                 <table>
                     <tr>
                         <th>Name:</th>
@@ -133,10 +151,9 @@ $sql_create_table = "CREATE TABLE IF NOT EXISTS sales_data (
                         <td><?php echo htmlspecialchars($close); ?></td>
                     </tr>
                     <tr>
-                        <th>Toatl Ltr:</th>
-                        <td><?php echo htmlspecialchars( $totalltr); ?></td>
+                        <th>Total Ltr:</th>
+                        <td><?php echo htmlspecialchars($totalltr); ?></td>
                     </tr>
-
                     <tr>
                         <th>Today Rate:</th>
                         <td><?php echo htmlspecialchars($tdrate); ?></td>
@@ -145,10 +162,8 @@ $sql_create_table = "CREATE TABLE IF NOT EXISTS sales_data (
                         <th>Ltr x Rate =</th>
                         <td><?php echo htmlspecialchars($totalcash); ?></td>
                     </tr>
-                    
-                    
                     <tr>
-                        <th>Field</th>
+                        <th>Fuel Type:</th>
                         <td><?php echo htmlspecialchars($fueltype); ?></td>
                     </tr>
                     <tr>
@@ -160,33 +175,36 @@ $sql_create_table = "CREATE TABLE IF NOT EXISTS sales_data (
                         <td><?php echo htmlspecialchars($cashhand); ?></td>
                     </tr>
                     <tr>
-                        <th>Credit</th>
+                        <th>Credit:</th>
                         <td><?php echo htmlspecialchars($credit); ?></td>
                     </tr>
                     <tr>
-                        <th>Upi</th>
-                        <td><?php echo htmlspecialchars($upi);  ?></td>
+                        <th>UPI:</th>
+                        <td><?php echo htmlspecialchars($upi); ?></td>
                     </tr>
                     <tr>
                         <th>Swipe:</th>
                         <td><?php echo htmlspecialchars($swipe); ?></td>
                     </tr>
                     <tr>
-                        <th>Other</th>
+                        <th>Test:</th>
+                        <td><?php echo htmlspecialchars($test); ?></td>
+                    </tr>
+                    <tr>
+                        <th>Other:</th>
                         <td><?php echo htmlspecialchars($other); ?></td>
                     </tr>
                     <tr>
-                        <th style="background-color:red">Short</th>
+                        <th style="background-color:red">Short:</th>
                         <td style="background-color:red"><?php echo htmlspecialchars($short); ?></td>
                     </tr>
                     <tr>
-                        <th>Make Sure, All correct</th>
-                        <td><button class="button">submit</button></td>  
+                        <th>Make Sure All Is Correct:</th>
+                        <td><button class="button">Submit</button></td>  
                     </tr>
                 </table>
                 </form>
             </div>
-             
         </div>
         <div class="main-rg">
             <h2>ENTER THE DETAILS BELOW</h2>
@@ -243,7 +261,7 @@ $sql_create_table = "CREATE TABLE IF NOT EXISTS sales_data (
                         <option value="petrol">Petrol</option>
                     </select>
                 </div>
-                <div class="form-group" >
+                <div class="form-group">
                     <label for="calculate">Calculate Sales:</label>
                     <input type="submit" value="Submit" name="submit-btn">
                 </div>
